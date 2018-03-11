@@ -1,7 +1,7 @@
 import math
 import os
 import hashlib
-from urllib.request import urlretrieve
+from urllib import urlretrieve
 import zipfile
 import gzip
 import shutil
@@ -102,11 +102,12 @@ def images_square_grid(images, mode):
     :return: Image of images in a square grid
     """
     # Get maximum size for square grid of images
-    save_size = math.floor(np.sqrt(images.shape[0]))
-
+    save_size = int(math.floor(np.sqrt(images.shape[0])))
+    #print ("save_size = ", save_size)
+    
     # Scale to 0-255
     images = (((images - images.min()) * 255) / (images.max() - images.min())).astype(np.uint8)
-
+    
     # Put images in a square arrangement
     images_in_square = np.reshape(
             images[:save_size*save_size],
@@ -120,7 +121,7 @@ def images_square_grid(images, mode):
         for image_i, image in enumerate(col_images):
             im = Image.fromarray(image, mode)
             new_im.paste(im, (col_i * images.shape[1], image_i * images.shape[2]))
-
+    
     return new_im
 
 
@@ -211,7 +212,7 @@ class Dataset(object):
         while current_index + batch_size <= self.shape[0]:
             data_batch = get_batch(
                 self.data_files[current_index:current_index + batch_size],
-                *self.shape[1:3],
+                self.shape[1],self.shape[2],
                 self.image_mode)
 
             current_index += batch_size

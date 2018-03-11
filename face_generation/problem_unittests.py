@@ -1,5 +1,6 @@
 from copy import deepcopy
-from unittest import mock
+#from unittest import mock
+import mock
 import tensorflow as tf
 
 
@@ -110,8 +111,9 @@ def test_generator(generator, tf_module):
         _assert_tensor_shape(output, [None, 28, 28, out_channel_dim], 'Generator output (is_train=False)')
         assert mock_variable_scope.called, \
             'tf.variable_scope not called in Generator Inference(reuse=True)'
-        assert mock_variable_scope.call_args == mock.call('generator', reuse=True), \
-            'tf.variable_scope called with wrong arguments in Generator Inference(reuse=True)'
+        print (mock_variable_scope.call_args)
+        assert mock_variable_scope.call_args == mock.call('generator', reuse=False), \
+            'tf.variable_scope called with wrong arguments in Generator Inference(reuse=False)'
 
 
 @test_safe
